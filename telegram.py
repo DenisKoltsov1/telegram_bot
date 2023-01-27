@@ -1,6 +1,8 @@
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.callback_data import CallbackData
 
 from config import TOKEN
 import logging
@@ -16,9 +18,13 @@ logging.basicConfig(level=logging.INFO)
 #Хэндлер — асинхронная функция, которая получает от диспетчера/роутера очередной апдейт и обрабатывает его.
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
+    cd_inline=CallbackData("post",'action',"data")
+    kb = [ types.InlineKeyboardButton(text='Пополнить баланс',callback_data='спасибо'),]
     
-    await message.reply(f'Привет, {message.from_user.first_name} \nЯ - бот для пополнения баланса.\nНажмите на кнопку, чтобы пополнить баланс. \nСнизу инлайн кнопка с текстом  Пополнить баланс')
-
+    #keyboard = types.ReplyKeyboardMarkup(keyboard=kb)
+    keyboard = types.InlineKeyboardMarkup().add(*kb)
+    #await message.reply(f'Привет, {message.from_user.first_name} \nЯ - бот для пополнения баланса.\nНажмите на кнопку, чтобы пополнить баланс.',reply_markup=keyboard)
+    await message.reply(f'Привет, {message.from_user.first_name}, \nЯ - бот для пополнения баланса.\nНажмите на кнопку, чтобы пополнить баланс. \nСнизу инлайн кнопка с текстом  Пополнить баланс',reply_markup=keyboard)
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
